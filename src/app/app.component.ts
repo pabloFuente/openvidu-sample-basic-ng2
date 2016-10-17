@@ -84,7 +84,7 @@ export class AppComponent {
     });
   }
 
-  leaveRoom() {
+  leaveSession() {
     this.session = null;
     this.streams = [];
     this.openVidu.close(true);

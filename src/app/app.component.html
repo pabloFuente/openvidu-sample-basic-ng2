@@ -17,7 +17,7 @@
 
 <div *ngIf="session">
 	<h2>{{sessionId}}</h2>
-	<input type="button" (click)="leaveRoom()" value="Leave session">
+	<input type="button" (click)="leaveSession()" value="Leave session">
 	<div>
 		<stream *ngFor="let s of streams" [stream]="s"></stream>
 	</div>
