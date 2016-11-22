@@ -30,19 +30,6 @@ Then, open in your browser and visit URL `https://localhost:8443` (or if you are
 
 Now you are ready to execute the sample application.
 
-## Start app development server
-
-
-## Generate build files
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
-
-
-
-
-
-
-
 ## Executing sample application
 
 In this repository you have a sample JavaScript application that use OpenVidu Development Server to allow videoconferences  between a group of users. Please clone it with the following command (you need git installed in your development machine):
