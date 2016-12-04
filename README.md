@@ -26,7 +26,7 @@ If you have installed Docker Toolbox in Windows or Mac, you need to know the IP 
 docker-machine ip default
 </pre>
 
-Then, open in your browser and visit URL `https://localhost:8443` (or if you are using Docker Toolbox in Windows or Mac visit `https://<IP>:8443`). Then, browser will complain about insecure certificate. Please accept the selfsigned certificate as valid.
+Then, open in your browser and visit URL `https://127.0.0.1:8443` (or if you are using Docker Toolbox in Windows or Mac visit `https://<IP>:8443`). Then, browser will complain about insecure certificate. Please accept the selfsigned certificate as valid.
 
 Now you are ready to execute the sample application.
 
@@ -63,11 +63,11 @@ this.openVidu = new OpenVidu("wss://127.0.0.1:8443/");
 
 You have to change `127.0.0.1` with the IP of the OpenVidu Development Server obtained in the previous step.
 
-Then you can go to `http://127.0.0.1:8080` to execute the sample application. 
+Then you can go to `http://localhost:4200/` to use the sample application. 
 
 As you can see, the user name and session is filled automatically in the form to make easier testing the app. 
 
-If you open `http://127.0.0.1:8080` in two tabs, you can simulate two users talking together. You can open as tabs as you want, but you need a very powerful development machine to test 3 or more users.
+If you open `http://localhost:4200/` in two tabs, you can simulate two users talking together. You can open as tabs as you want, but you need a very powerful development machine to test 3 or more users.
 
 For now, it is not possible use the sample application from a different computer.
 
