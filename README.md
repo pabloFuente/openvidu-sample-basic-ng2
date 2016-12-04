@@ -70,3 +70,19 @@ As you can see, the user name and session is filled automatically in the form to
 If you open `http://127.0.0.1:8080` in two tabs, you can simulate two users talking together. You can open as tabs as you want, but you need a very powerful development machine to test 3 or more users.
 
 For now, it is not possible use the sample application from a different computer.
+
+## Troubleshooting
+
+If you click the joing button and nothing happens, check the developer tools log. If you see
+
+<pre>
+Chrome: using SDP PlanB
+lang.js:234Angular 2 is running in the development mode. Call enableProdMode() to enable the production mode.
+Participant.js:32 New local participant undefined, streams opts:  []
+jsonrpcclient.js:127 Connecting websocket to URI: wss://127.0.0.1:8443/room
+browser.js:38 WebSocket connection to 'wss://127.0.0.1:8443/room' failed: WebSocket opening handshake was canceledws @ browser.js:38WebSocketWithReconnection @ webSocketWithReconnection.js:59JsonRpcClient @ jsonrpcclient.js:125OpenVidu.initJsonRpcClient @ OpenVidu.js:63OpenVidu.connect @ OpenVidu.js:35AppComponent.joinSession @ app.component.ts:46_View_AppComponent1._handle_submit_5_0 @ AppComponent.ngfactory.js:533(anonymous function) @ view.js:403(anonymous function) @ dom_renderer.js:249(anonymous function) @ dom_events.js:26ZoneDelegate.invoke @ zone.js:232onInvoke @ ng_zone_impl.js:43ZoneDelegate.invoke @ zone.js:231Zone.runGuarded @ zone.js:128NgZoneImpl.runInnerGuarded @ ng_zone_impl.js:72NgZone.runGuarded @ ng_zone.js:235outsideHandler @ dom_events.js:26ZoneDelegate.invokeTask @ zone.js:265Zone.runTask @ zone.js:154ZoneTask.invoke @ zone.js:335
+</pre>
+
+You have to go to
+
+https://localhost:8443/ or https://127.0.0.1:8443/ and accept the certificate 
