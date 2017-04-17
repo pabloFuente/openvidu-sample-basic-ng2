@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { OpenVidu, Session, Stream } from 'openvidu-browser';
+import { OpenViduTokBox, SessionTokBox } from 'openvidu-browser';
 
 @Component({
   selector: 'app-root',
@@ -7,87 +7,65 @@ import { OpenVidu, Session, Stream } from 'openvidu-browser';
 })
 export class AppComponent {
 
-  private openVidu: OpenVidu;
+  private OV: OpenViduTokBox;
+  private session: SessionTokBox;
 
-  //Join form
+  // Join form
   sessionId: string;
-  participantId: string;
-
-  //Session
-  session: Session;
-  streams: Stream[] = [];
+  token: string;
 
   constructor() {
     this.generateParticipantInfo();
-    window.onbeforeunload = () => {
-      this.openVidu.close(true);
-    }
   }
 
-  private generateParticipantInfo(){
-    this.sessionId = "SessionA";
-    this.participantId = "Participant"+Math.floor(Math.random() * 100);
-  }
-
-  private addVideoTag(stream:Stream){
-    console.log("Stream added");
-    this.streams.push(stream);
-  }
-
-  private removeVideoTag(stream:Stream){
-    console.log("Stream removed");
-    this.streams.slice(this.streams.indexOf(stream), 1);
+  private generateParticipantInfo() {
+    this.sessionId = 'SessionA';
+    this.token = 'Participant' + Math.floor(Math.random() * 100);
   }
 
   joinSession() {
+    this.sessionId = (<HTMLInputElement>document.getElementById('sessionId')).value;
+    this.token = (<HTMLInputElement>document.getElementById('token')).value;
 
-    this.openVidu = new OpenVidu("wss://127.0.0.1:8443/");
+    this.OV = new OpenViduTokBox('wss://' + location.hostname + ':8443/');
+    this.session = this.OV.initSession('apikey', this.sessionId);
 
-    this.openVidu.connect((error, openVidu) => {
-
-      if (error)
-        return console.log(error);
-
-      let camera = openVidu.getCamera();
-
-      camera.requestCameraAccess((error, camera) => {
-
-        if (error)
-          return console.log(error);
-
-        var sessionOptions = {
-          sessionId: this.sessionId,
-          participantId: this.participantId
-        }
-
-        openVidu.joinSession(sessionOptions, (error, session) => {
-
-          if (error)
-            return console.log(error);
-
-          this.session = session;
-
-          this.addVideoTag(camera);
-
-          camera.publish();
-
-          session.addEventListener("stream-added", streamEvent => {
-            this.addVideoTag(streamEvent.stream);            
-          });
-
-          session.addEventListener("stream-removed", streamEvent => {
-            this.removeVideoTag(streamEvent.stream);            
-          });
-
-        });
+    // 2) Specify the actions when events take place
+    this.session.on('streamCreated', (event) => {
+      this.session.subscribe(event.stream, 'subscriber', {
+        insertMode: 'append',
+        width: '100%',
+        height: '100%'
       });
     });
+
+    // 3) Connect to the session
+    this.session.connect(this.token, (error) => {
+      // If the connection is successful, initialize a publisher and publish to the session
+      if (!error) {
+
+        // 4) Get your own camera stream with the desired resolution and publish it, only if the user is supposed to do so
+        let publisher = this.OV.initPublisher('publisher', {
+          insertMode: 'append',
+          width: '100%',
+          height: '100%'
+        });
+
+        // 5) Publish your stream
+        this.session.publish(publisher);
+
+      } else {
+        console.log('There was an error connecting to the session:', error.code, error.message);
+      }
+    });
+
+    return false;
   }
 
   leaveSession() {
+    if (this.OV) {this.session.disconnect();};
     this.session = null;
-    this.streams = [];
-    this.openVidu.close(true);
+    this.OV = null;
     this.generateParticipantInfo();
   }
 
